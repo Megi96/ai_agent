@@ -1,0 +1,37 @@
+# Environment
+.env
+.env.local
+
+# Cursor (local agent config, plans, hooks)
+.cursor/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Data
+backend/data/uploads/
+backend/data/chroma/
+data/uploads/
+data/chroma/
+
+# Node
+node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
