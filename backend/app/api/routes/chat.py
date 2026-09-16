@@ -10,4 +10,8 @@ _agent = ResearchAgent()
 
 @router.post("", response_model=ChatResponse)
 async def chat(request: ChatRequest) -> ChatResponse:
-    return await _agent.answer(question=request.question, use_web=request.use_web)
+    return await _agent.answer(
+        question=request.question,
+        use_web=request.use_web,
+        use_documents=request.use_documents,
+    )

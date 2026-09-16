@@ -19,8 +19,11 @@ build/
 # Data
 backend/data/uploads/
 backend/data/chroma/
+backend/data/documents.json
+backend/backend/
 data/uploads/
 data/chroma/
+data/documents.json
 
 # Node
 node_modules/

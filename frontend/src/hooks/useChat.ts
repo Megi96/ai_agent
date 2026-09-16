@@ -13,7 +13,7 @@ export function useChat() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const ask = useCallback(async (question: string, useWeb: boolean) => {
+  const ask = useCallback(async (question: string, useWeb: boolean, useDocuments = true) => {
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: "user",
@@ -24,7 +24,7 @@ export function useChat() {
     setError(null);
 
     try {
-      const response = await sendChat(question, useWeb);
+      const response = await sendChat(question, useWeb, useDocuments);
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",

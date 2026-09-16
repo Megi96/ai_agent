@@ -1,0 +1,18 @@
+Project: AI Research Agent (Demo Prototype)
+Status: Early prototype — RAG working, Claude synthesis coming next.
+
+Team notes:
+- Megi is building a personal research assistant.
+- Phase 1 completed: project skeleton and web UI.
+- Phase 2 completed: document ingest and vector search.
+- Phase 3 planned: Claude answers using retrieved context.
+- Phase 4 planned: polish the demo UI and citations.
+- Phase 5 planned: optional voice input and output.
+
+Technical stack:
+- Backend: FastAPI + LangChain + ChromaDB
+- Frontend: React + Vite + TypeScript
+- Embeddings: sentence-transformers (local, no API key needed for search)
+
+Demo tip: upload this file or click "Load demo documents" in the UI, then ask
+"What is the technical stack?" or "What phase is Claude synthesis?"

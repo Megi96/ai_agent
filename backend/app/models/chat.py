@@ -18,7 +18,8 @@ class Source(BaseModel):
 
 class ChatRequest(BaseModel):
     question: str = Field(..., min_length=1)
-    use_web: bool = False
+    use_web: bool = True
+    use_documents: bool = True
 
 
 class ChatResponse(BaseModel):

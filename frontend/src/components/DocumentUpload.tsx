@@ -1,24 +1,54 @@
 import { ChangeEvent, useState } from "react";
-import { uploadDocument } from "../api/client";
+import {
+  DocumentMetadata,
+  seedDemoDocuments,
+  uploadDocument,
+} from "../api/client";
+import { DocumentList } from "./DocumentList";
 
-export function DocumentUpload() {
+interface DocumentUploadProps {
+  documents: DocumentMetadata[];
+  loading: boolean;
+  onDocumentsChange: () => Promise<void>;
+}
+
+export function DocumentUpload({
+  documents,
+  loading,
+  onDocumentsChange,
+}: DocumentUploadProps) {
   const [status, setStatus] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
+    setBusy(true);
     setStatus(null);
     try {
       const response = await uploadDocument(file);
       setStatus(`Uploaded: ${response.document.filename}`);
+      await onDocumentsChange();
     } catch (err) {
       setStatus(err instanceof Error ? err.message : "Upload failed");
     } finally {
-      setUploading(false);
+      setBusy(false);
       event.target.value = "";
+    }
+  }
+
+  async function handleLoadDemo() {
+    setBusy(true);
+    setStatus(null);
+    try {
+      const response = await seedDemoDocuments();
+      setStatus(response.message);
+      await onDocumentsChange();
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : "Demo load failed");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -26,18 +56,36 @@ export function DocumentUpload() {
     <section className="panel upload-panel">
       <h2>Documents</h2>
       <p className="panel-description">
-        Upload PDF, DOCX, TXT, or Markdown files to build your knowledge base.
+        Upload PDF, DOCX, TXT, or Markdown — or load the bundled demo set to try
+        a question right away.
       </p>
+
+      <button
+        type="button"
+        className="demo-button"
+        onClick={handleLoadDemo}
+        disabled={busy}
+      >
+        {busy ? "Working..." : "Load demo documents"}
+      </button>
+
       <label className="upload-zone">
         <input
           type="file"
           accept=".pdf,.docx,.txt,.md,.markdown"
           onChange={handleFileChange}
-          disabled={uploading}
+          disabled={busy}
         />
-        <span>{uploading ? "Uploading..." : "Choose a file or drop it here"}</span>
+        <span>{busy ? "Please wait..." : "Or choose your own file"}</span>
       </label>
-      {status && <p className="upload-status">{status}</p>}
+
+      {status && (
+        <p className={status.toLowerCase().includes("fail") ? "error" : "upload-status"}>
+          {status}
+        </p>
+      )}
+
+      <DocumentList documents={documents} loading={loading} />
     </section>
   );
 }
