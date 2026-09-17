@@ -3,6 +3,8 @@
 **Final scope:** An agent that **searches the web and writes a summary.**
 
 Give it a topic or question → it searches the web (Tavily or DuckDuckGo) → Claude writes a concise, sourced summary. You can optionally upload documents for extra context.
+<img width="353" height="295" alt="image" src="https://github.com/user-attachments/assets/85d79e3d-d363-4a15-bbf4-67c3d8828c43" />
+
 
 ## Architecture
 
