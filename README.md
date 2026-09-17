@@ -87,6 +87,18 @@ ai_agent/
 - [ ] Speech-to-text input (`backend/app/voice/` stub exists)
 - [ ] Text-to-speech for summaries
 
+#### Phase 6 — Long-term memory
+- [ ] Persist conversation history across sessions (not just in-browser state)
+- [ ] Store user preferences, past topics, and prior summaries for recall
+- [ ] Retrieve relevant past exchanges when answering new questions
+- [ ] Optional: summarize or prune old memory to stay within context limits
+
+#### Phase 7 — Evaluation
+- [ ] Define eval datasets (sample questions + expected qualities)
+- [ ] Measure summary quality (faithfulness, relevance, citation accuracy)
+- [ ] Benchmark RAG retrieval (precision/recall on document Q&A)
+- [ ] Track regressions in CI or a manual eval script before releases
+
 #### Backend hardening
 - [ ] Rate limiting and upload size caps
 - [ ] More integration tests with real API mocks
