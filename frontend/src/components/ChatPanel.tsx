@@ -52,12 +52,18 @@ export function ChatPanel({ hasDocuments }: ChatPanelProps) {
 
       <div className="messages">
         {messages.length === 0 && (
-          <p className="empty-state">
-            Enter a topic — the agent searches the web and writes a summary.
-            {hasDocuments && includeDocs
-              ? " Your uploaded documents are included as extra context."
-              : ""}
-          </p>
+          <div className="empty-state">
+            <div className="empty-state-icon" aria-hidden="true">
+              ✦
+            </div>
+            <p className="empty-state-title">Ready when you are</p>
+            <p className="empty-state-text">
+              Enter a topic — the agent searches the web and writes a summary.
+              {hasDocuments && includeDocs
+                ? " Your uploaded documents are included as extra context."
+                : ""}
+            </p>
+          </div>
         )}
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />

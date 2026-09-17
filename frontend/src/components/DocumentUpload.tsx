@@ -76,7 +76,13 @@ export function DocumentUpload({
           onChange={handleFileChange}
           disabled={busy}
         />
-        <span>{busy ? "Please wait..." : "Or choose your own file"}</span>
+        <span className="upload-zone-icon" aria-hidden="true">
+          ↑
+        </span>
+        <span className="upload-zone-text">
+          {busy ? "Please wait..." : "Drop a file here or click to browse"}
+        </span>
+        <span className="upload-zone-hint">PDF, DOCX, TXT, Markdown</span>
       </label>
 
       {status && (

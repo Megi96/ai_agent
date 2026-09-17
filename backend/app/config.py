@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     )
 
     anthropic_api_key: str = ""
-    anthropic_model: str = "claude-sonnet-4-20250514"
+    anthropic_model: str = "claude-sonnet-4-6"
     tavily_api_key: str = ""
     web_search_max_results: int = 5
     chroma_persist_dir: str = "./data/chroma"
