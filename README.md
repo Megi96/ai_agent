@@ -220,6 +220,8 @@ All variables go in `ai_agent/.env` at the project root.
 | `RETRIEVAL_TOP_K` | No | Document chunks retrieved per query (default: `5`) |
 | `BACKEND_PORT` | No | API port (default: `8000`) |
 | `FRONTEND_PORT` | No | Frontend dev port (default: `5173`) |
+| `CORS_ORIGINS` | No | Comma-separated frontend URLs for production (e.g. Vercel) |
+| `VITE_API_URL` | No | Frontend only: Render backend URL when deployed (see Deploy section) |
 
 ---
 
@@ -242,6 +244,79 @@ All variables go in `ai_agent/.env` at the project root.
   "use_documents": true
 }
 ```
+
+---
+
+## Deploy online (Render + Vercel)
+
+Host the **backend** on [Render](https://render.com) and the **frontend** on [Vercel](https://vercel.com). Both connect to your GitHub repo `Megi96/ai_agent` on branch `main`.
+
+### 1. Backend on Render
+
+1. [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** (or **Web Service**).
+2. Connect GitHub → select **ai_agent**.
+3. If using **Blueprint**, Render reads `render.yaml` at the repo root.
+4. If creating **Web Service** manually:
+
+   | Field | Value |
+   |-------|--------|
+   | Root directory | `backend` |
+   | Build | `pip install -r requirements.txt` |
+   | Start | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
+
+5. Add a **persistent disk** (1 GB) mounted at `/data` (uploads + ChromaDB).
+6. **Environment variables** (Render → your service → Environment):
+
+   | Variable | Value |
+   |----------|--------|
+   | `ANTHROPIC_API_KEY` | Your full key from console.anthropic.com |
+   | `ANTHROPIC_MODEL` | `claude-sonnet-4-6` |
+   | `CHROMA_PERSIST_DIR` | `/data/chroma` |
+   | `UPLOAD_DIR` | `/data/uploads` |
+   | `REGISTRY_PATH` | `/data/documents.json` |
+   | `CORS_ORIGINS` | Your Vercel URL (step 2), e.g. `https://ai-agent.vercel.app` |
+
+7. Deploy and copy the service URL, e.g. `https://ai-agent-api.onrender.com`.
+8. Test: open `https://YOUR-API.onrender.com/health` — should return `{"status":"ok"}` (first load may take ~1 min on free tier).
+
+### 2. Frontend on Vercel
+
+1. [Vercel](https://vercel.com) → **Add New Project** → import **ai_agent**.
+2. Settings:
+
+   | Field | Value |
+   |-------|--------|
+   | Root directory | `frontend` |
+   | Build command | `npm run build` |
+   | Output directory | `dist` |
+
+3. **Environment variable** (Production):
+
+   ```
+   VITE_API_URL=https://YOUR-API.onrender.com
+   ```
+
+   Use the Render URL from step 1 — **no** trailing slash, **no** `/api` suffix.
+
+4. Deploy → open the Vercel URL and try **Summarize**.
+
+5. If the browser blocks requests, double-check `CORS_ORIGINS` on Render matches your Vercel URL exactly (`https://`, no trailing slash).
+
+### 3. Push code before deploying
+
+Deploy the latest `main` branch (includes `CORS_ORIGINS` and `VITE_API_URL` support):
+
+```bash
+git add -A
+git commit -m "Add deployment config for Render and Vercel"
+git push origin main
+```
+
+### Notes
+
+- **Free Render** sleeps when idle; the first visit after a while can be slow.
+- **Costs**: visitors use **your** Anthropic key — share the link carefully.
+- **Quick local share** (no hosting): run the app locally and use [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/) or [ngrok](https://ngrok.com/) on port `5173`.
 
 ---
 

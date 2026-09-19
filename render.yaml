@@ -1,0 +1,27 @@
+# Render Blueprint — backend API only.
+# Connect repo at https://dashboard.render.com → New → Blueprint
+# Set ANTHROPIC_API_KEY and CORS_ORIGINS in the Render dashboard after deploy.
+
+services:
+  - type: web
+    name: ai-agent-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: CHROMA_PERSIST_DIR
+        value: /data/chroma
+      - key: UPLOAD_DIR
+        value: /data/uploads
+      - key: REGISTRY_PATH
+        value: /data/documents.json
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+    disk:
+      name: ai-agent-data
+      mountPath: /data
+      sizeGB: 1

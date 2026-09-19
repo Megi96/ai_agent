@@ -25,7 +25,11 @@ export interface UploadResponse {
   message: string;
 }
 
-const API_BASE = "/api";
+/** Dev: Vite proxies `/api` → backend. Production: set VITE_API_URL to your Render URL. */
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(
+  /\/$/,
+  ""
+) ?? "/api";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, options);

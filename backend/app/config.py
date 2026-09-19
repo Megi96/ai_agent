@@ -31,6 +31,17 @@ class Settings(BaseSettings):
     retrieval_top_k: int = 5
     backend_port: int = 8000
     frontend_port: int = 5173
+    # Comma-separated browser origins allowed to call the API (e.g. Vercel URL)
+    cors_origins: str = ""
 
 
 settings = Settings()
+
+
+def get_cors_origins() -> list[str]:
+    origins = {f"http://localhost:{settings.frontend_port}"}
+    for origin in settings.cors_origins.split(","):
+        cleaned = origin.strip().rstrip("/")
+        if cleaned:
+            origins.add(cleaned)
+    return sorted(origins)
